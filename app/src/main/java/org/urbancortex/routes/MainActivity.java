@@ -201,7 +201,7 @@ public class MainActivity extends Activity {
 
             if (password.equals("4321")) {
                 // clean the password field
-                passwordText.clearComposingText();
+                passwordText.setText("");
                 return true;
             } else {
                 return false;

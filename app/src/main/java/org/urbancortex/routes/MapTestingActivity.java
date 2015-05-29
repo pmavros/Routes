@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.*;
@@ -256,6 +255,8 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
 
     public void onTestingClick(View view){
 
+        final EditText numberCode = (EditText) findViewById(R.id.numberPassword);
+
         switch(view.getId())
         {
             case R.id.button1:
@@ -265,6 +266,8 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                 stopBtn.setVisibility(View.VISIBLE);
 
                 recordEvents("startRoute", elapsedRealtime());
+                numberCode.setEnabled(false);
+
 
 
                 break;
@@ -284,6 +287,8 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                                 stopBtn.setVisibility(View.INVISIBLE);
 
                                 recordEvents("arrived", elapsedRealtime());
+                                numberCode.setEnabled(true);
+                                numberCode.setText("");
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
