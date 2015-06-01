@@ -32,17 +32,7 @@ public class MainActivity extends Activity {
 
         new locations(this, locations.ProviderType.GPS).start();
 
-        Button b = (Button)findViewById(R.id.cont);
-        Button s = (Button)findViewById(R.id.stop);
-
-        if(isRecording){
-
-            b.setVisibility(View.VISIBLE);
-            s.setVisibility(View.VISIBLE);
-        } else if (!isRecording){
-            b.setVisibility(View.INVISIBLE);
-            s.setVisibility(View.INVISIBLE);
-        }
+        buttonVisibility();
     }
 
     @Override
@@ -70,31 +60,22 @@ public class MainActivity extends Activity {
         super.onResume();
 
         System.out.println("main.onresume "+ isRecording);
-
-
-        Button b = (Button)findViewById(R.id.cont);
-        Button s = (Button)findViewById(R.id.stop);
-
-        if(isRecording){
-
-            b.setVisibility(View.VISIBLE);
-            s.setVisibility(View.VISIBLE);
-        } else if (!isRecording){
-            b.setVisibility(View.INVISIBLE);
-            s.setVisibility(View.INVISIBLE);
-        }
+        buttonVisibility();
     }
 
     public void onStart(){
         super.onStart();
 
         System.out.println("main.onstart");
+       buttonVisibility();
 
+    }
+
+    private void buttonVisibility() {
         Button b = (Button)findViewById(R.id.cont);
         Button s = (Button)findViewById(R.id.stop);
 
         if(isRecording){
-
             b.setVisibility(View.VISIBLE);
             s.setVisibility(View.VISIBLE);
         } else if (!isRecording){
@@ -180,18 +161,16 @@ public class MainActivity extends Activity {
 
         if(readWriteSettings.folderSettings() ){
 
-            if(checkPassword()){
-                if(!participantID.isEmpty()){
+            if(!participantID.isEmpty()){
 
-                    // start second activity
-                    Intent intent = new Intent(this, MapTestingActivity.class);
-                    intent.putExtra(EXTRA_MESSAGE, participantID);
+                // start second activity
+                Intent intent = new Intent(this, MapTestingActivity.class);
+                intent.putExtra(EXTRA_MESSAGE, participantID);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
 
-                    startActivity(intent);
-
-                } else {
-                    Toast.makeText(this, "Hey, did you forget to enter your participant ID?", Toast.LENGTH_LONG).show();
-                }
+            } else {
+                Toast.makeText(this, "Hey, did you forget to enter your participant ID?", Toast.LENGTH_LONG).show();
             }
 
         } else {
@@ -204,6 +183,7 @@ public class MainActivity extends Activity {
     /** Called when the user clicks the STOP button */
     public void stopExperiment(View view) {
 
+        System.out.println(isRecording);
 
         // get ready to stop
         final Intent stopCSVIntent = new Intent(this, csv_logger.class);
@@ -223,8 +203,14 @@ public class MainActivity extends Activity {
 
                             // if yes, stop the logger
                             isRecording = false;
+                            isWalking = false;
+                            isRunning = false;
+
                             stopService(stopCSVIntent);
                             stopService(stopMapIntent);
+
+                            Toast.makeText(MainActivity.this, "Experiment stopped", Toast.LENGTH_LONG).show();
+                            buttonVisibility();
 
                         }
                     })
@@ -244,7 +230,7 @@ public class MainActivity extends Activity {
         // get the present password
         EditText passwordText = (EditText) findViewById(R.id.edit_password);
 
-        if(passwordText!=null){
+        if(passwordText!=null && !passwordText.equals("")){
             // get the present password
             String password = passwordText.getText().toString();
             System.out.println(password);
@@ -255,11 +241,13 @@ public class MainActivity extends Activity {
                 passwordText.setText("");
                 return true;
             } else {
+
+                Toast.makeText(MainActivity.this, "Enter correct research password first.", Toast.LENGTH_LONG).show();
                 return false;
             }
 
         } else {
-            Toast.makeText(this, "Enter research password first.", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Enter correct research password first.", Toast.LENGTH_LONG).show();
             return false;
         }
     }

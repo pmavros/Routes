@@ -31,8 +31,8 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
 
     MapFragment mapFragment;
     boolean isPressed;
-    Button startBtn ;
-    Button stopBtn ;
+    Button startBtn;
+    Button stopBtn;
     SimpleDateFormat formatterDate = new SimpleDateFormat("dd/MM/yyyy");
     SimpleDateFormat formatterTime = new SimpleDateFormat("HH:mm:ss.SSS");
     private String date;
@@ -41,10 +41,15 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
     csv_logger mService;
     boolean mBound = false;
 
+
+    Polyline RouteA;
+    Polyline RouteB;
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-       // getMenuInflater().inflate(R.menu.menu_maptesting, menu);
+        // getMenuInflater().inflate(R.menu.menu_maptesting, menu);
         return true;
     }
 
@@ -79,10 +84,8 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         fm = getFragmentManager();
         fm.beginTransaction().hide(mapFragment).commit();
 
-        startBtn = (Button) findViewById(R.id.button1);
-        stopBtn = (Button) findViewById(R.id.button2);
-        startBtn.setVisibility(View.VISIBLE);
-        stopBtn.setVisibility(View.INVISIBLE);
+        updateButtonState();
+
     }
 
     protected ServiceConnection mConnection = new ServiceConnection() {
@@ -100,7 +103,7 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
     };
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         // Bind to LocalService
@@ -108,9 +111,10 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         bindService(intent, mConnection, 0);
     }
 
-
-    Polyline RouteA;
-    Polyline RouteB;
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -122,30 +126,24 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         map.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
 
             private float currentZoom = -1;
-            private double currentLat =0;
-            private double currentLon =0;
-
+            private double currentLat = 0;
+            private double currentLon = 0;
 
             @Override
             public void onCameraChange(CameraPosition pos) {
 
                 System.out.println(pos.toString());
-
-
-
                 if (pos.zoom != currentZoom) {
                     currentZoom = pos.zoom;
                     // do you action here
                     System.out.println("new zoom event");
-                    recordEvents("zoom: "+ currentZoom, elapsedRealtime());
+                    recordEvents("zoom: " + currentZoom, elapsedRealtime());
 
 
                 } else {
-                    if(pos.target.latitude!= currentLat || pos.target.longitude!= currentLon){
+                    if (pos.target.latitude != currentLat || pos.target.longitude != currentLon) {
                         System.out.println("new map scroll event");
-                        recordEvents("scroll: "+ pos.target, elapsedRealtime());
-
-
+                        recordEvents("scroll: " + pos.target, elapsedRealtime());
                     }
                 }
             }
@@ -156,30 +154,30 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
 
         // Polylines are useful for marking paths and routes on the map.
         RouteA = map.addPolyline(new PolylineOptions().geodesic(true).add(
-                new LatLng(51.52278,-0.1318252),
-                new LatLng(51.52144,-0.1351941),
-                new LatLng(51.52080,-0.1345932),
-                new LatLng(51.51927,-0.1329517),
-                new LatLng(51.51854,-0.1322758),
-                new LatLng(51.51746,-0.1312083),
-                new LatLng(51.51698,-0.1307389),
-                new LatLng(51.51646,-0.1303983),
-                new LatLng(51.51622,-0.1329088),
-                new LatLng(51.51565,-0.1324368),
-                new LatLng(51.51531,-0.1322007)
+                new LatLng(51.52278, -0.1318252),
+                new LatLng(51.52144, -0.1351941),
+                new LatLng(51.52080, -0.1345932),
+                new LatLng(51.51927, -0.1329517),
+                new LatLng(51.51854, -0.1322758),
+                new LatLng(51.51746, -0.1312083),
+                new LatLng(51.51698, -0.1307389),
+                new LatLng(51.51646, -0.1303983),
+                new LatLng(51.51622, -0.1329088),
+                new LatLng(51.51565, -0.1324368),
+                new LatLng(51.51531, -0.1322007)
         ));
 
         RouteB = map.addPolyline(new PolylineOptions().geodesic(true).add(
-                new LatLng(51.51531,-0.1322007),
-                new LatLng(51.51622,-0.1329088),
-                new LatLng(51.51630,-0.1326299),
-                new LatLng(51.51658,-0.1326299),
-                new LatLng(51.51678,-0.1322222),
-                new LatLng(51.51708,-0.1307631),
-                new LatLng(51.51734,-0.1296043),
-                new LatLng(51.51900,-0.1312780),
-                new LatLng(51.52009,-0.1287031),
-                new LatLng(51.52278,-0.1318252)
+                new LatLng(51.51531, -0.1322007),
+                new LatLng(51.51622, -0.1329088),
+                new LatLng(51.51630, -0.1326299),
+                new LatLng(51.51658, -0.1326299),
+                new LatLng(51.51678, -0.1322222),
+                new LatLng(51.51708, -0.1307631),
+                new LatLng(51.51734, -0.1296043),
+                new LatLng(51.51900, -0.1312780),
+                new LatLng(51.52009, -0.1287031),
+                new LatLng(51.52278, -0.1318252)
         ));
 
         RouteA.setVisible(false);
@@ -191,8 +189,10 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
     }
 
 
+
+
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
 
         // Unbind from the service
@@ -207,21 +207,22 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         int keyCode = event.getKeyCode();
         int action = event.getAction();
 
-
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                if (action == KeyEvent.ACTION_DOWN && !isPressed && isWalking ) {
+                if (action == KeyEvent.ACTION_DOWN && !isPressed && isWalking) {
 
                     recordEvents("showMap", elapsedRealtime());
                     isMapDisplayed = true;
                     isPressed = true;
                     updateMap();
+                    showMap();
 
-                } else if (action == KeyEvent.ACTION_UP && isMapDisplayed){
+                } else if (action == KeyEvent.ACTION_UP && isMapDisplayed) {
                     recordEvents("hideMap", elapsedRealtime());
                     isPressed = false;
                     isMapDisplayed = false;
                     updateMap();
+                    showMap();
                 }
                 return true;
             default:
@@ -229,31 +230,52 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         }
     }
 
-    public void updateMap(){
-
+    public boolean currentRoute() {
 
         EditText numberCode = (EditText) findViewById(R.id.numberPassword);
         String routeCode = numberCode.getText().toString();
 
-        if(routeCode.equals("123")){
-            RouteA.setVisible(true);
-            RouteB.setVisible(false);
+        if (routeCode != null && routeCode.equals("123"))
+        {
+            currentRoute = "a";
+            return true;
+        } else if (routeCode != null && routeCode.equals("321"))
+        {
+            currentRoute = "b";
+            return true;
+        } else
+        {
+            return false;
+        }
+    }
 
+    public boolean updateMap(){
+        if(currentRoute != null){
+            if(currentRoute.equals("a")){
+                RouteA.setVisible(true);
+                RouteB.setVisible(false);
 
-        } else if (routeCode.equals("321")){
-            RouteA.setVisible(false);
-            RouteB.setVisible(true);
+            } else if (currentRoute.equals("b")){
+                RouteA.setVisible(false);
+                RouteB.setVisible(true);
+
+            } else {
+                RouteA.setVisible(false);
+                RouteB.setVisible(false);
+            }
+            return true;
 
         } else {
-            RouteA.setVisible(false);
-            RouteB.setVisible(false);
+            return false;
         }
+    }
+
+    public void showMap(){
 
         if(isPressed){
             fm.beginTransaction().show(mapFragment).commit();
         } else {
             fm.beginTransaction().hide(mapFragment).commit();
-
         }
     }
 
@@ -265,14 +287,14 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         {
             case R.id.button1:
                 // handle button A click;
-                isWalking = true;
-                startBtn.setVisibility(View.INVISIBLE);
-                stopBtn.setVisibility(View.VISIBLE);
 
-                recordEvents("startRoute", elapsedRealtime());
-                numberCode.setEnabled(false);
+                if(currentRoute()){
+                    isWalking = true;
+                    updateButtonState();
 
-
+                    recordEvents("startRoute", elapsedRealtime());
+                    numberCode.setEnabled(false);
+                }
 
                 break;
             case R.id.button2:
@@ -287,12 +309,12 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                             public void onClick(DialogInterface dialog, int which) {
                                 // continue with
                                 isWalking = false;
-                                startBtn.setVisibility(View.VISIBLE);
-                                stopBtn.setVisibility(View.INVISIBLE);
+                                updateButtonState();
 
                                 recordEvents("arrived", elapsedRealtime());
                                 numberCode.setEnabled(true);
                                 numberCode.setText("");
+                                currentRoute = null;
                             }
                         })
                         .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -306,7 +328,7 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                 break;
 
             default:
-                throw new RuntimeException("Unknow button ID");
+                throw new RuntimeException("Unknown button ID");
         }
 
     }
@@ -366,6 +388,21 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
             e.printStackTrace();
         }
 
+
+    }
+
+    private void updateButtonState(){
+
+        startBtn = (Button) findViewById(R.id.button1);
+        stopBtn = (Button) findViewById(R.id.button2);
+
+        if(!isWalking){
+            startBtn.setVisibility(View.VISIBLE);
+            stopBtn.setVisibility(View.INVISIBLE);
+        } else {
+            startBtn.setVisibility(View.INVISIBLE);
+            stopBtn.setVisibility(View.VISIBLE);
+        }
 
     }
 }
