@@ -23,22 +23,24 @@ public class readWriteSettings {
             out.println("external storage is fine");
 
             // sets the files in the directory
-            fileDirectory = new File(Environment.getExternalStorageDirectory() + "/Fieldworker");
-            fileWriteDirectory = new File(Environment.getExternalStorageDirectory() + "/Fieldworker/data");
+            fileDirectory = new File(Environment.getExternalStorageDirectory() + "/Routes-io");
+            fileWriteDirectory = new File(Environment.getExternalStorageDirectory() + "/Routes-io/data");
             // check if directory exists
             if (fileDirectory.exists()) {
                 // do something here
                 out.println("folder fieldworker exists in sd storage");
 
-                // check if data folder exists
-                if (!fileWriteDirectory.isDirectory()) {
-                    // do something here
-                    fileWriteDirectory.mkdirs();
-                }
-
             } else {
-                System.out.println("no fieldworker folder");
+                fileDirectory.mkdirs();
+                System.out.println("Had to make Routes-io folder");
             }
+
+            // check if data folder exists
+            if (!fileWriteDirectory.isDirectory()) {
+                // do something here
+                fileWriteDirectory.mkdirs();
+            }
+
             return true;
 
         } else {

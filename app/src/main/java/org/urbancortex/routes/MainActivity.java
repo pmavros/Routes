@@ -28,18 +28,20 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         System.out.println("main.oncreate");
 
         new locations(this, locations.ProviderType.GPS).start();
 
+        Button b = (Button)findViewById(R.id.cont);
+        Button s = (Button)findViewById(R.id.stop);
+
         if(isRecording){
-            Button b = (Button)findViewById(R.id.cont);
+
             b.setVisibility(View.VISIBLE);
+            s.setVisibility(View.VISIBLE);
         } else if (!isRecording){
-            Button b = (Button)findViewById(R.id.cont);
             b.setVisibility(View.INVISIBLE);
+            s.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -70,12 +72,16 @@ public class MainActivity extends Activity {
         System.out.println("main.onresume "+ isRecording);
 
 
+        Button b = (Button)findViewById(R.id.cont);
+        Button s = (Button)findViewById(R.id.stop);
+
         if(isRecording){
-            Button b = (Button)findViewById(R.id.cont);
+
             b.setVisibility(View.VISIBLE);
+            s.setVisibility(View.VISIBLE);
         } else if (!isRecording){
-            Button b = (Button)findViewById(R.id.cont);
             b.setVisibility(View.INVISIBLE);
+            s.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -84,41 +90,18 @@ public class MainActivity extends Activity {
 
         System.out.println("main.onstart");
 
+        Button b = (Button)findViewById(R.id.cont);
+        Button s = (Button)findViewById(R.id.stop);
+
         if(isRecording){
-            Button b = (Button)findViewById(R.id.cont);
+
             b.setVisibility(View.VISIBLE);
+            s.setVisibility(View.VISIBLE);
         } else if (!isRecording){
-            Button b = (Button)findViewById(R.id.cont);
             b.setVisibility(View.INVISIBLE);
+            s.setVisibility(View.INVISIBLE);
         }
     }
-
-
-    /** Called when the user clicks the Continue button */
-    public void continueExperiment(View view) {
-
-        // Do something in response to button
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String participantID = editText.getText().toString();
-
-        if(readWriteSettings.folderSettings() && checkPassword() ){
-
-            if(!participantID.isEmpty()){
-
-                // start second activity
-                Intent intent = new Intent(this, MapTestingActivity.class);
-                intent.putExtra(EXTRA_MESSAGE, participantID);
-
-                startActivity(intent);
-
-            } else {
-                Toast.makeText(this, "Hey, did you forget to enter your participant ID?", Toast.LENGTH_LONG).show();
-            }
-        } else {
-            Toast.makeText(this, "Oops, I couldn't find the folders I need in the system!", Toast.LENGTH_LONG).show();
-        }
-    }
-
 
     /** Called when the user clicks the Start new button */
     public void newExperiment(View view) {
@@ -130,7 +113,7 @@ public class MainActivity extends Activity {
 
         if(readWriteSettings.folderSettings() && checkPassword()){
 
-         // prepare logger settings
+            // prepare logger settings
             final Intent loggerIntent = new Intent(this, csv_logger.class);
             loggerIntent.putExtra("fileDir", readWriteSettings.fileWriteDirectory.toString());
             loggerIntent.putExtra("participantID", participantID);
@@ -188,6 +171,74 @@ public class MainActivity extends Activity {
         }
     }
 
+    /** Called when the user clicks the Continue button */
+    public void continueExperiment(View view) {
+
+        // Do something in response to button
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        String participantID = editText.getText().toString();
+
+        if(readWriteSettings.folderSettings() ){
+
+            if(checkPassword()){
+                if(!participantID.isEmpty()){
+
+                    // start second activity
+                    Intent intent = new Intent(this, MapTestingActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, participantID);
+
+                    startActivity(intent);
+
+                } else {
+                    Toast.makeText(this, "Hey, did you forget to enter your participant ID?", Toast.LENGTH_LONG).show();
+                }
+            }
+
+        } else {
+            Toast.makeText(this, "Oops, I couldn't find the folders I need in the system!", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+
+    /** Called when the user clicks the STOP button */
+    public void stopExperiment(View view) {
+
+
+        // get ready to stop
+        final Intent stopCSVIntent = new Intent(this, csv_logger.class);
+        final Intent stopMapIntent = new Intent(this, MapTestingActivity.class);
+        stopMapIntent.putExtra("keep", false);
+
+        // Do something in response to button
+        if (isRecording && checkPassword()) {
+
+            // check if the want to stop  recording
+            new AlertDialog.Builder(this)
+                    .setTitle("Stop Recording")
+                    .setMessage("Are you sure you want to stop the current recording session?")
+                    .setIcon(0)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            // if yes, stop the logger
+                            isRecording = false;
+                            stopService(stopCSVIntent);
+                            stopService(stopMapIntent);
+
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .show();
+        }
+    }
+
+
+
     public boolean checkPassword(){
 
         // get the present password
@@ -211,9 +262,7 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "Enter research password first.", Toast.LENGTH_LONG).show();
             return false;
         }
-
     }
-
 
     public void startNewRecording(Intent intent){
         isRecording = true;

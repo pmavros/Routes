@@ -182,6 +182,9 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                 new LatLng(51.52278,-0.1318252)
         ));
 
+        RouteA.setVisible(false);
+        RouteB.setVisible(false);
+
         map.addMarker(new MarkerOptions().position(new LatLng(51.522821, -0.131833)).title("Start"));
         map.addMarker(new MarkerOptions().position(new LatLng(51.515297, -0.132230)).title("Stop"));
 
@@ -208,18 +211,16 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (action == KeyEvent.ACTION_DOWN && !isPressed && isWalking ) {
-                    //TODO
 
-                    System.out.println("press");
                     recordEvents("showMap", elapsedRealtime());
-
+                    isMapDisplayed = true;
                     isPressed = true;
                     updateMap();
 
-                } else if (action == KeyEvent.ACTION_UP){
-                    System.out.println("released");
+                } else if (action == KeyEvent.ACTION_UP && isMapDisplayed){
                     recordEvents("hideMap", elapsedRealtime());
                     isPressed = false;
+                    isMapDisplayed = false;
                     updateMap();
                 }
                 return true;
@@ -243,6 +244,9 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
             RouteA.setVisible(false);
             RouteB.setVisible(true);
 
+        } else {
+            RouteA.setVisible(false);
+            RouteB.setVisible(false);
         }
 
         if(isPressed){

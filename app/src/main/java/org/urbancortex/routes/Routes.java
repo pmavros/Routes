@@ -14,6 +14,7 @@ public class Routes extends Application {
     public static long startTime = System.currentTimeMillis();
     public static boolean isRunning = false;
     public static boolean isWalking = false;
+    public static boolean isMapDisplayed = false;
 
 
 }

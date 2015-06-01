@@ -9,4 +9,5 @@
     <string name="button_new">Start new experiment</string>
     <string name="edit_message">Participant ID</string>
     <string name="edit_route">route code</string>
+    <string name="button_stop">Stop Experiment</string>
 </resources>
