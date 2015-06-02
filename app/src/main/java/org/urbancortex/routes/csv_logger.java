@@ -167,6 +167,7 @@ public class csv_logger extends Service {
 
             eventInfo = "GPS" + ", " +
                     date + ", " +
+                    "NA , "+
                     currentTime+ ", " +
                     epoch + ", " +
                     locations.lat + ", " +
@@ -206,12 +207,12 @@ public class csv_logger extends Service {
 
         buf = new BufferedWriter(new FileWriter(new File(fileWriteDirectory, outputFileName) ));
 
-        String record = "event, date, time, epoch, lat, lon, speed, bearing, elevation, accuracy";
+        String record = "event, details, date, time, epoch, lat, lon, speed, bearing, elevation, accuracy";
 
         buf.write(record);
         buf.append("\n");
 
-        String record2 = "timeOffset: "+ timeOffset+", "+ elapsedRealtime();
+        String record2 = "timeOffset: "+ timeOffset+", "+ System.currentTimeMillis();
         buf.write(record2);
         buf.append("\n");
     }

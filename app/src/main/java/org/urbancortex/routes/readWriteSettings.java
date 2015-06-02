@@ -22,13 +22,33 @@ public class readWriteSettings {
         if (isExternalStorageWritable()) {
             out.println("external storage is fine");
 
+            String strSDCardPath = System.getenv("SECONDARY_STORAGE");
+
+            if ((strSDCardPath == null) || (strSDCardPath.length() == 0)) {
+                strSDCardPath = System.getenv("EXTERNAL_SDCARD_STORAGE");
+            }
+
+            //If may get a full path that is not the right one, even if we don't have the SD Card there.
+            //We just need the "/mnt/extSdCard/" i.e and check if it's writable
+            if(strSDCardPath != null) {
+                if (strSDCardPath.contains(":")) {
+                    strSDCardPath = strSDCardPath.substring(0, strSDCardPath.indexOf(":"));
+                }
+                File externalFilePath = new File(strSDCardPath);
+
+                if (externalFilePath.exists() && externalFilePath.canWrite()){
+                    //do what you need here
+                    System.out.println(externalFilePath);
+                }
+            }
+
             // sets the files in the directory
-            fileDirectory = new File(Environment.getExternalStorageDirectory() + "/Routes-io");
-            fileWriteDirectory = new File(Environment.getExternalStorageDirectory() + "/Routes-io/data");
+            fileDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/Routes-io");
+            fileWriteDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/Routes-io/data");
             // check if directory exists
             if (fileDirectory.exists()) {
                 // do something here
-                out.println("folder fieldworker exists in sd storage");
+                out.println("folder routes-io exists in sd storage" +fileDirectory);
 
             } else {
                 fileDirectory.mkdirs();
