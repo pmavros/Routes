@@ -4,10 +4,13 @@
     <string name="title_activity_main">Routes</string>
     <string name="hello_world">To see the map, press the volume-up button (top, on the left side of the screen).</string>
     <string name="action_settings">Settings</string>
-    <string name="action_exit">exit</string>
+    <string name="action_exit">Settings</string>
     <string name="button_continue">Continue current experiment</string>
     <string name="button_new">Start new experiment</string>
     <string name="edit_message">Participant ID</string>
     <string name="edit_route">route code</string>
     <string name="button_stop">Stop Experiment</string>
+    <string name="remote_ip">Remote IP</string>
+    <string name="time_offset">Time offset</string>
+    <string name="time_offsetAverage">Time offset (average)</string>
 </resources>

@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +20,7 @@ import static android.os.SystemClock.elapsedRealtime;
 import static org.urbancortex.routes.Routes.*;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 
     public final static String EXTRA_MESSAGE = "org.urbancortex.routes.MESSAGE";
     private File fileWriteDirectory;
@@ -38,8 +40,11 @@ public class MainActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -51,6 +56,7 @@ public class MainActivity extends Activity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            getTimeOffset();
             return true;
         }
 
@@ -260,5 +266,14 @@ public class MainActivity extends Activity {
         startService(intent);
 
         System.out.println("starting logger service");
+    }
+
+    public void getTimeOffset(){
+        //Do something about it
+
+        // start second activity
+        Intent intentTimeOffset = new Intent(this, TimeOffsetActivity.class);
+        startActivity(intentTimeOffset);
+
     }
 }

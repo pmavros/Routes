@@ -210,6 +210,10 @@ public class csv_logger extends Service {
 
         buf.write(record);
         buf.append("\n");
+
+        String record2 = "timeOffset: "+ timeOffset+", "+ elapsedRealtime();
+        buf.write(record2);
+        buf.append("\n");
     }
 
     /* Checks if external storage is available for read and write */

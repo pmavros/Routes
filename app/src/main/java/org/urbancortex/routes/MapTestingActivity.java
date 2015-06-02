@@ -44,6 +44,7 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
 
     Polyline RouteA;
     Polyline RouteB;
+    Polyline RouteC;
 
 
     @Override
@@ -109,6 +110,7 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         // Bind to LocalService
         Intent intent = new Intent(this, csv_logger.class);
         bindService(intent, mConnection, 0);
+
     }
 
     @Override
@@ -180,8 +182,15 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
                 new LatLng(51.52278, -0.1318252)
         ));
 
+        RouteC = map.addPolyline(new PolylineOptions().geodesic(true).add(
+                new LatLng(51.522045, -0.135761),
+                new LatLng(51.521431, -0.135150),
+                new LatLng(51.52278, -0.1318252)
+        ));
+
         RouteA.setVisible(false);
         RouteB.setVisible(false);
+        RouteC.setVisible(false);
 
         map.addMarker(new MarkerOptions().position(new LatLng(51.522821, -0.131833)).title("Start"));
         map.addMarker(new MarkerOptions().position(new LatLng(51.515297, -0.132230)).title("Stop"));
@@ -235,34 +244,47 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
         EditText numberCode = (EditText) findViewById(R.id.numberPassword);
         String routeCode = numberCode.getText().toString();
 
-        if (routeCode != null && routeCode.equals("123"))
-        {
-            currentRoute = "a";
-            return true;
-        } else if (routeCode != null && routeCode.equals("321"))
-        {
-            currentRoute = "b";
-            return true;
-        } else
-        {
-            return false;
+        switch (routeCode){
+            case "123":
+                currentRoute = "a";
+                return true;
+            case "321":
+                currentRoute = "b";
+                return true;
+            case "111":
+                currentRoute = "c";
+                return true;
+            default:
+                return false;
         }
     }
 
     public boolean updateMap(){
         if(currentRoute != null){
-            if(currentRoute.equals("a")){
-                RouteA.setVisible(true);
-                RouteB.setVisible(false);
 
-            } else if (currentRoute.equals("b")){
-                RouteA.setVisible(false);
-                RouteB.setVisible(true);
+            switch (currentRoute){
+                case "a":
+                    RouteA.setVisible(true);
+                    RouteB.setVisible(false);
+                    RouteC.setVisible(false);
+                    break;
+                case "b":
+                    RouteA.setVisible(false);
+                    RouteB.setVisible(true);
+                    RouteC.setVisible(false);
+                    break;
+                case "c":
+                    RouteA.setVisible(false);
+                    RouteB.setVisible(false);
+                    RouteC.setVisible(true);
+                    break;
+                default:
+                    RouteA.setVisible(false);
+                    RouteB.setVisible(false);
+                    RouteC.setVisible(false);
 
-            } else {
-                RouteA.setVisible(false);
-                RouteB.setVisible(false);
             }
+
             return true;
 
         } else {

@@ -16,5 +16,6 @@ public class Routes extends Application {
     public static boolean isWalking = false;
     public static boolean isMapDisplayed = false;
     public static String currentRoute;
+    public static long timeOffset = 0;
 
 }
