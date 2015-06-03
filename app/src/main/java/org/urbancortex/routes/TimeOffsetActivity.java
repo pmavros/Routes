@@ -49,6 +49,9 @@ public class TimeOffsetActivity extends ActionBarActivity {
 
         for (int i =0; i < a.length; i++) {
 
+            offsetAverageText.setText("Running test "+i);
+
+
             if (newIp != null) {
                 info = NTPClient.main(new String[]{newIp}); //"time-a.nist.gov"
             }

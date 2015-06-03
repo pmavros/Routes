@@ -13,4 +13,5 @@
     <string name="remote_ip">Remote IP</string>
     <string name="time_offset">Time offset</string>
     <string name="time_offsetAverage">Time offset (average)</string>
+    <string name="ntp_instructions">Setup a wifi hotspot from the Android. Connect to it from the laptop/tablet. Enter the remote IP below.</string>
 </resources>

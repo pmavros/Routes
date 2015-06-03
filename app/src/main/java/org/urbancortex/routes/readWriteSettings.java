@@ -43,8 +43,8 @@ public class readWriteSettings {
             }
 
             // sets the files in the directory
-            fileDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/Routes-io");
-            fileWriteDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "/Routes-io/data");
+            fileDirectory = new File(Environment.getExternalStorageDirectory()+ "/Routes-io");
+            fileWriteDirectory = new File(Environment.getExternalStorageDirectory()+ "/Routes-io/data");
             // check if directory exists
             if (fileDirectory.exists()) {
                 // do something here
