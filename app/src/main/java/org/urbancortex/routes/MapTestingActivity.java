@@ -408,6 +408,7 @@ public class MapTestingActivity extends ActionBarActivity implements OnMapReadyC
 
         String eventInfo = newEvent + ", " +
                 details + ", " +
+                currentRoute + ", " +
                 date + ", " +
                 currentTime + ", " +
                 timestamp + ", " +

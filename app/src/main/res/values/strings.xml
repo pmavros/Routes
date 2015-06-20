@@ -2,7 +2,7 @@
     <string name="app_name">Routes</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_main">Routes</string>
-    <string name="hello_world">To see the map, press the volume-up button (top, on the left side of the screen).</string>
+    <string name="hello_world">To see the map, press and hold the volume-up button (top, on the left side of the screen).</string>
     <string name="action_settings">Settings</string>
     <string name="action_exit">Settings</string>
     <string name="button_continue">Continue current experiment</string>
